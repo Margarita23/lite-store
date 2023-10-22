@@ -2,14 +2,18 @@ import { Component, ChangeEvent } from "react";
 import ItemDataService from "../services/item.service";
 import { Link } from "react-router-dom";
 import IItemData from '../types/item.type';
+import ICartItemData from '../types/cartItem.type';
 
-type Props = {};
+type Props = {
+  addToCart: (cartItem: ICartItemData) => void
+};
 
 type State = {
   items: Array<IItemData>,
   currentItem: IItemData | null,
   currentIndex: number,
-  searchName: string
+  searchName: string,
+  quantity: number
 };
 
 export default class Items extends Component<Props, State>{
@@ -21,12 +25,14 @@ export default class Items extends Component<Props, State>{
     this.setActiveItem = this.setActiveItem.bind(this);
     this.removeAllItems = this.removeAllItems.bind(this);
     this.searchName = this.searchName.bind(this);
+    this.handleQuantityChange = this.handleQuantityChange.bind(this);
 
     this.state = {
       items: [],
       currentItem: null,
       currentIndex: -1,
-      searchName: ""
+      searchName: "",
+      quantity: 1
     };
   }
 
@@ -99,8 +105,25 @@ export default class Items extends Component<Props, State>{
       });
   }
 
+  addToCart(item: ICartItemData) {
+    item.count = this.state.quantity;
+    this.props.addToCart(item);
+
+    this.setState({
+      quantity: 1
+    });
+  }
+
+  handleQuantityChange(e: ChangeEvent<HTMLInputElement>) {
+    const newQuantity = parseInt(e.target.value, 10); 
+
+    this.setState({
+      quantity: newQuantity
+    });
+  };
+
   render() {
-    const { searchName, items, currentItem, currentIndex } = this.state;
+    const { searchName, items, currentItem, currentIndex, quantity } = this.state;
 
     return (
       <div className="list row">
@@ -172,13 +195,22 @@ export default class Items extends Component<Props, State>{
                 </label>{" "}
                 {currentItem.price}
               </div>
+              <div>
+                <label>
+                  Name:
+                  <input type="number" name="quantity" min="1" value={quantity} onChange={this.handleQuantityChange}/>
+                </label>
+                <button className="btn btn-sm btn-success btn-effect-success" onClick={() => this.addToCart({item: currentItem} as ICartItemData)}>AddToCart</button>
+              </div>
 
-              <Link
-                to={"/items/" + currentItem.id}
-                className="badge badge-warning"
-              >
-                Edit
-              </Link>
+              <div>
+                <Link
+                  to={"/items/" + currentItem.id}
+                  className="badge badge-warning btn btn-secondary"
+                >
+                  Edit
+                </Link>
+              </div>
             </div>
           ) : (
             <div>

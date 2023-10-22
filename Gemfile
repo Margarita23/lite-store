@@ -7,6 +7,11 @@ ruby "3.2.2"
 gem "rails", "~> 7.0.8"
 
 gem "rack-cors"
+gem "devise"
+gem "jsonapi-serializer"
+gem "jwt"
+gem "bcrypt" # only for unit-tests
+gem "pry" # only for debugging
 
 # Use postgresql as the database for Active Record
 gem "pg", "~> 1.1"
