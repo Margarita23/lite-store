@@ -14,21 +14,9 @@ class Users::SessionsController < Devise::SessionsController
     end
   end
 
-  # def destroy
-  #   super
-  # end
-
   private
 
   def sign_in_params
     params.require(:session).permit(:email, :password)
   end
 end
-
-
- # auth_object = Authentication.new(sign_in_params)
-    # sign_out(auth_object.current_user)
-    # render json: {
-      # message: "Logout successful!",
-      # token: "",
-      # user: {}}, status: :ok
