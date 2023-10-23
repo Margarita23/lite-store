@@ -1,1 +1,1 @@
-web: bundle exec puma -C config/puma.rb
+web: unset PORT && env RUBY_DEBUG_OPEN=true bin/rails server -p ${PORT:-5000} -e $RAILS_ENV
