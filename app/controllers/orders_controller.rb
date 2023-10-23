@@ -1,4 +1,5 @@
 class OrdersController < ApplicationController
+  respond_to :json
   before_action :set_order, only: %i[ show update destroy ]
 
   def index

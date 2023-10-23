@@ -1,30 +1,29 @@
 import React, { Component } from 'react';
-import axios from 'axios';
+import UserDataService from "../services/user.service";
 
-class Signup extends React.Component {
+export default class Signup extends Component {
     constructor(props){
       super(props);
       this.handleSignup = this.handleSignup.bind(this);
     }
   handleSignup(e) {
-      e.preventDefault();
-      let that = this
-      let email = this.props.currentUser;
+        e.preventDefault();
+        let that = this;
 
-      axios.post('/users', {
-        user: {
-          email: document.getElementById("email").value,
-          password: document.getElementById("password").value,
-          password_confirmation: document.getElementById("password_confirmation").value
-        }
-      })
-      .then(function(response){
-        that.props.changePage("delete");
-        that.props.updateCurrentUser(email);
-      })
-      .catch(function(error){
-        console.log(error)
-      })
+        UserDataService.create({
+            user: {
+                email: document.getElementById("email").value,
+                password: document.getElementById("password").value,
+                password_confirmation: document.getElementById("password_confirmation").value
+            }
+        })
+        .then(function(response){
+            that.props.changePage("delete");
+            that.props.updateCurrentUser(response.data);
+        })
+        .catch(function(error){
+            console.log(error)
+        })
   }
   render() {
     return (
@@ -41,5 +40,3 @@ class Signup extends React.Component {
       );
     };
   };
-
-export default Signup;  

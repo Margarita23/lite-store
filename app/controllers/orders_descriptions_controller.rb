@@ -1,4 +1,5 @@
 class OrdersDescriptionsController < ApplicationController
+  respond_to :json
   before_action :set_orders_description, only: %i[ show update destroy ]
   before_action :set_order, only: %i[ index ]
   

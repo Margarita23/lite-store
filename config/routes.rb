@@ -7,7 +7,7 @@ Rails.application.routes.draw do
   get 'users/check_for_user'
   devise_for :users, path: '', path_names: {
     sign_in: 'login',
-    sign_out: 'logout',
+    sign_out: 'logout', to: 'devise/sessions#destroy',
     registration: 'signup'
   },
   controllers: {

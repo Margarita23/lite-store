@@ -54,7 +54,6 @@ export default class Items extends Component<Props, State>{
         this.setState({
           items: response.data
         });
-        console.log(response.data);
       })
       .catch((e: Error) => {
         console.log(e);
@@ -79,7 +78,6 @@ export default class Items extends Component<Props, State>{
   removeAllItems() {
     ItemDataService.deleteAll()
       .then((response: any) => {
-        console.log(response.data);
         this.refreshList();
       })
       .catch((e: Error) => {
@@ -98,7 +96,6 @@ export default class Items extends Component<Props, State>{
         this.setState({
           items: response.data
         });
-        console.log(response.data);
       })
       .catch((e: Error) => {
         console.log(e);

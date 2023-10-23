@@ -1,4 +1,5 @@
 class ItemsController < ApplicationController
+  respond_to :json
   before_action :set_item, only: %i[ show update destroy ]
 
   # GET /items

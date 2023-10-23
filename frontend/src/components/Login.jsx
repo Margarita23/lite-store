@@ -1,98 +1,59 @@
-import React, { Component } from 'react';
+import React from 'react';
 import UserDataService from '../services/user.service';
 
 class Login extends React.Component {
     constructor(props){
       super(props);
       this.handleLogin = this.handleLogin.bind(this);
+      this.state = {
+        email: "",
+        password: ""
+      }
     }
+
     handleLogin(e) {
         e.preventDefault();
         let that = this
-        let email = this.props.currentUser;
+        let { email, password } = this.state;
 
-        UserDataService.newUserSession(
-            {
-                user: {
-                    email: document.getElementById("email").value,
-                    password: document.getElementById("password").value,
-                }
-            }
-        )
-        .then(function(response){
+        UserDataService.newUserSession({ email, password })
+        .then((response) => {
             that.props.changePage("delete");
             that.props.updateCurrentUser(response.data);
-            // console.log(response.data.user);
-            console.log('1234567891234567890');
-            console.log(response.data);
-            // that.props.setEmail(response.data.user?.email);
-            // that.props.setJson(response.data.json);
         })
-        .catch(function(error){
+        .catch((error) => {
             console.log(error);
-        })
-  }
-  render() {
-    return (
-        <div>
-          <h2>Login</h2>
-          <form>
-            <input id="email" placeholder="email"/>
-            <input id="password" placeholder="password"/>
-            <button onClick={this.handleLogin}>Submit</button>
-          </form>
-          <button onClick={() => this.props.changePage("signup")}>Back to Sign Up</button>
-        </div>
-      );
-    };
+        });
   };
 
-export default Login;  
+  render() {
+    const {email, password} = this.state;
+    return (
+        <div>
+        <h2>Login</h2>
+        <form onSubmit={this.handleLogin}>
+            <input
+            type="text"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => this.setState({
+                email: e.target.value
+              })}
+            />
+            <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => this.setState({
+                password: e.target.value
+              })}
+            />
+            <button type="submit">Login</button>
+        </form>
+        <button onClick={() => this.props.changePage("signup")}>Back to Sign up</button>
+        </div>
+    );
+  }
+}
 
-// import React, { Component } from 'react';
-// import UserDataService from '../services/user.service';
-
-// const Login: React.FC = function() {
-    
-//     handleLogin(e: any) {
-//         e.preventDefault();
-//         let that = this
-//         let email = this.props.currentUser;
-
-//         UserDataService.newUserSession(
-//             {
-//                 user: {
-//                     email: document.getElementById("email").value,
-//                     password: document.getElementById("password").value,
-//                 }
-//             }
-//         )
-//         .then(function(response){
-//             that.props.changePage("delete");
-//             that.props.updateCurrentUser(response.data);
-//             // console.log(response.data.user);
-//             console.log('1234567891234567890');
-//             console.log(response.data);
-//             setEmail(data.user?.email);
-//             setJson(data.json);
-//         })
-//         .catch(function(error){
-//             console.log(error);
-//         })
-//     }
-//     this.handleLogin = this.handleLogin.bind(this);
-
-//     return (
-//         <div>
-//           <h2>Login</h2>
-//           <form>
-//             <input id="email" placeholder="email"/>
-//             <input id="password" placeholder="password"/>
-//             <button onClick={this.handleLogin}>Submit</button>
-//           </form>
-//           <button onClick={() => this.props.changePage("signup")}>Back to Sign Up</button>
-//         </div>
-//     );
-// };
-
-// export default Login;  
+export default Login;

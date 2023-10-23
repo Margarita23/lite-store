@@ -24,6 +24,10 @@ class Header extends React.Component {
       }
     render() {
         let a = null;
+
+        console.log(this.props);
+        console.log(this.state);
+
         switch(this.state.page) {
           case "signup":
             a = <Signup changePage={this.changePage} updateCurrentUser={this.props.updateCurrentUser}/>; break;

@@ -13,25 +13,27 @@ import { useLocalStorage } from './useLocalStorage';
 import ShoppingCart from './shopping-cart.svg';
 import Cart from './components/cart.component';
 import ICartItemData from './types/cartItem.type';
+import Logout from './components/Logout';
 
 interface IResponseData {
   user: IUserData | null;
-  json: string
+  token: string
 }
 
 const App: React.FC = function() {
   const [email, setEmail] = useLocalStorage("email", "");
-  const [json, setJson] = useLocalStorage("json", "");
+  const [token, setToken] = useLocalStorage("token", "");
+  const [isLogin, setIsLogin] = useLocalStorage("isLogin", "0");
+
   const [cartItems, setCartItems] = useState<ICartItemData[]>([]);
+  const [currentUser, setCurrentUser] = useState<IUserData | null>(null);
 
   function updateCurrentUser(data: IResponseData) {
-    console.log(data);
-    console.log('********************');
-
-
+    setCurrentUser(data.user);
     setEmail(data.user?.email);
-    setJson(data.json);
-  }
+    setIsLogin("1");
+    setToken(data.token);
+  };
 
   function addToCart(cartItem: ICartItemData) {
     const existingCartItemIndex = cartItems.findIndex((item) => item.item.id === cartItem.item.id);
@@ -64,42 +66,17 @@ const App: React.FC = function() {
     setCartItems(updatedCartItems);
   }
 
-  // useEffect(() => {
-  //   UserDataService.currentUser(localStorage.getItem('json') as string)
-  //     .then(function(response) {
-  //       console.log('Here is a user ->');
-  //       console.log(response.data);
-  //       console.log(response);
-  //       if(response.data){
-  //         console.log('-----------------4');
-  //         // updateCurrentUser(response)
-  //         // that.setState({
-  //         //   currentUser: response.data.user
-  //         // })
-  //       } else {
-  //         console.log('-----------------6');
-  //         // that.setState({
-  //         //   currentUser: null
-  //         // })
-  //       }
-  //     })
-  //     .catch(function(error){
-  //       console.log('-----------------!!!');
-  //       console.log(error);
-  //     })
-  // });
+  useEffect(() => {
+    setIsLogin("0");
+    }, [token]);
 
 
   return (
     <div>
-        <strong>Current:</strong>
-        <p>{localStorage.getItem('email')}</p>
-        <strong>Token:</strong>
-        <p>{localStorage.getItem('json')}</p>
+      {currentUser ? (
         <div>
-          <Header updateCurrentUser={updateCurrentUser} setEmail={setEmail} setJson={setJson}/>
-        </div>
-        <nav className="navbar navbar-expand navbar-dark bg-dark">
+          <Header updateCurrentUser={updateCurrentUser}/>
+          <nav className="navbar navbar-expand navbar-dark bg-dark">
           <Link to={"/items"} className="navbar-brand">
             Items
           </Link>
@@ -122,14 +99,20 @@ const App: React.FC = function() {
           </div>
         </nav>
 
-        <div className="container mt-3">
-          <Routes>
-            <Route path='/items' element={<Items addToCart={addToCart}/>} />
-            <Route path="/orders" element={<Orders/>} />
-            <Route path="/add" element={<AddItem/>} />
-            <Route path="/cart" element={<Cart cartItems={cartItems} addToCart={addToCart} onRemoveFromCart={removeItemFromCart} onUpdateCartItem={updateCartItem} completeOrder={completeOrder}/>} />
-          </Routes>
+          <div className="container mt-3">
+            <Routes>
+              <Route path='/items' element={<Items addToCart={addToCart}/>} />
+              <Route path="/orders" element={<Orders/>} />
+              <Route path="/add" element={<AddItem/>} />
+              <Route path="/cart" element={<Cart cartItems={cartItems} addToCart={addToCart} onRemoveFromCart={removeItemFromCart} onUpdateCartItem={updateCartItem} completeOrder={completeOrder}/>} />
+            </Routes>
+          </div>
         </div>
+      ) : (
+        <div>
+          <Header updateCurrentUser={updateCurrentUser} isLogin={isLogin}/>
+        </div>
+      )}
       </div>
   );
 };

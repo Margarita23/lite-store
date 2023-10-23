@@ -5,5 +5,6 @@ export default interface IUserData {
     last_name: string,
     password: string,
     encrypted_password: string,
-    role: number
+    role: number,
+    token: string
   }

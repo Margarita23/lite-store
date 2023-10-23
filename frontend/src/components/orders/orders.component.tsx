@@ -91,7 +91,6 @@ export default class Orders extends Component<Props, State>{
         this.setState({
           orders: response.data
         });
-        console.log(response.data);
       })
       .catch((e: Error) => {
         console.log(e);

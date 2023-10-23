@@ -1,14 +1,9 @@
 class User < ApplicationRecord
-  # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable, :trackable and :omniauthable
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
   
   enum role: [:user, :admin]
   has_many :orders
 
-  def generate_jwt
-    JWT.encode({id: id, exp: 60.days.from_now.to_i}, Rails.application.secrets.secret_key_base)
-  end
-
+  validates :email, presence: true, uniqueness: true
 end
