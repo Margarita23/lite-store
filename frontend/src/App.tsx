@@ -13,7 +13,9 @@ import { useLocalStorage } from './useLocalStorage';
 import ShoppingCart from './shopping-cart.svg';
 import Cart from './components/cart.component';
 import ICartItemData from './types/cartItem.type';
-import Logout from './components/Logout';
+
+import fetch from 'isomorphic-fetch'
+import runtimeEnv from '@mars/heroku-js-runtime-env'
 
 interface IResponseData {
   user: IUserData | null;
@@ -24,9 +26,14 @@ const App: React.FC = function() {
   const [email, setEmail] = useLocalStorage("email", "");
   const [token, setToken] = useLocalStorage("token", "");
   const [isLogin, setIsLogin] = useLocalStorage("isLogin", "0");
+  this.state = {
+      data: ""
+    }
 
   const [cartItems, setCartItems] = useState<ICartItemData[]>([]);
   const [currentUser, setCurrentUser] = useState<IUserData | null>(null);
+
+  const [data, setData] = useState<any>("");
 
   function updateCurrentUser(data: IResponseData) {
     setCurrentUser(data.user);
@@ -68,7 +75,11 @@ const App: React.FC = function() {
 
   useEffect(() => {
     setIsLogin("0");
-    }, [token]);
+    const url = runtimeEnv().REACT_APP_API_URL
+    fetch(url)
+      .then( (res: any) => res.json() )
+      .then( (json: any) => setData(json) )
+    }, []);
 
 
   return (
