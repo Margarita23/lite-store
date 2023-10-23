@@ -26,9 +26,6 @@ const App: React.FC = function() {
   const [email, setEmail] = useLocalStorage("email", "");
   const [token, setToken] = useLocalStorage("token", "");
   const [isLogin, setIsLogin] = useLocalStorage("isLogin", "0");
-  this.state = {
-      data: ""
-    }
 
   const [cartItems, setCartItems] = useState<ICartItemData[]>([]);
   const [currentUser, setCurrentUser] = useState<IUserData | null>(null);
